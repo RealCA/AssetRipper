@@ -1,5 +1,6 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Export.Modules.Shaders.Exporters;
 using AssetRipper.Export.Modules.Shaders.Exporters.DirectX;
 using AssetRipper.Export.Modules.Shaders.Exporters.USCDirectX;
@@ -20,6 +21,7 @@ using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.SerializedShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedPass;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProgram;
+using AssetRipper.SourceGenerated.Subclasses.SerializedProgramParameters;
 using AssetRipper.SourceGenerated.Subclasses.SerializedShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubShader;
@@ -384,8 +386,10 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("{");
 
+						CommonParameterConverted vertbinds = CreateBindings(_this, _this.ProgVertex.CommonParameters);
+
 						vertexConverter!.ConvertShaderToUShaderProgram();
-						vertexConverter.ApplyMetadataToProgram(vertexSubProgram, writer.Version);
+						vertexConverter.ApplyMetadataToProgram(vertexSubProgram, vertbinds, writer.Version);
 						string progamText = vertexConverter.CovnertUShaderProgramToHLSL(4);
 						writer.Write(progamText);
 
@@ -417,8 +421,10 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("{");
 
+						CommonParameterConverted fragbinds = CreateBindings(_this, _this.ProgFragment.CommonParameters);
+
 						fragmentConverter.ConvertShaderToUShaderProgram();
-						fragmentConverter.ApplyMetadataToProgram(fragmentSubProgram, writer.Version);
+						fragmentConverter.ApplyMetadataToProgram(fragmentSubProgram, fragbinds, writer.Version);
 						string progamText = fragmentConverter.CovnertUShaderProgramToHLSL(4);
 						writer.Write(progamText);
 
@@ -437,6 +443,69 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				writer.WriteIndent(2);
 				writer.Write("}\n");
 			}
+		}
+
+		public static CommonParameterConverted CreateBindings(ISerializedPass _shaderPass, SerializedProgramParameters CommonParameters)
+		{
+			CommonParameterConverted binding = new CommonParameterConverted(CommonParameters.ConstantBufferBindings.Count, CommonParameters.ConstantBuffers.Count);
+
+			int indexer = 0;
+			foreach (SourceGenerated.Subclasses.BufferBinding.BufferBinding_2020_1_0_a17 paraBinding in CommonParameters.ConstantBufferBindings)
+			{
+				string buffname = (string)_shaderPass.NameIndices.First(x => x.Value == paraBinding.NameIndex).Key;
+				//_shaderPass.
+				binding.bufferBindings[indexer] = new BufferBinding(buffname, paraBinding.Index);
+				binding.bufferBindings[indexer].NameIndex = paraBinding.NameIndex;
+				binding.bufferBindings[indexer].ArraySize = paraBinding.ArraySize;
+				SourceGenerated.Subclasses.ConstantBuffer.ConstantBuffer_2020_3_2 buff = CommonParameters.ConstantBuffers.First(b => b.NameIndex == binding.bufferBindings[indexer].NameIndex);
+				StructParameter[] structParams = ConvertVectorParams(buff.StructParams, _shaderPass);
+				MatrixParameter[] mparray = ConvertMatrixParams(buff.MatrixParams, _shaderPass);
+				VectorParameter[] vectorParams = ConvertVectorParams(buff.VectorParams, _shaderPass);
+				binding.constantBuffers[indexer] = new ConstantBuffer(buffname, mparray, vectorParams, structParams, buff.Size);
+				binding.constantBuffers[indexer].IsPartialCB = buff.IsPartialCB;
+				indexer++;
+			}
+			return binding;
+		}
+
+		private static StructParameter[] ConvertVectorParams(AssetList<SourceGenerated.Subclasses.StructParameter.StructParameter> structParams, ISerializedPass _shaderPass)
+		{
+			StructParameter[] _structParams = new StructParameter[structParams.Count];
+			int indexer = 0;
+			foreach (SourceGenerated.Subclasses.StructParameter.StructParameter _sp in structParams)
+			{
+				_structParams[indexer] = new StructParameter(_shaderPass.NameIndices.First(x => x.Value == _sp.NameIndex).Key, _sp.Index, _sp.ArraySize, _sp.StructSize, ConvertVectorParams(_sp.VectorMembers, _shaderPass), ConvertMatrixParams(_sp.MatrixMembers, _shaderPass));
+				_structParams[indexer].NameIndex = _sp.NameIndex;
+				indexer++;
+			}
+			return _structParams;
+		}
+
+		private static VectorParameter[] ConvertVectorParams(AssetList<SourceGenerated.Subclasses.VectorParameter.VectorParameter> vectorParams, ISerializedPass _shaderPass)
+		{
+			VectorParameter[] _vectorParams = new VectorParameter[vectorParams.Count];
+			int indexer = 0;
+			foreach (SourceGenerated.Subclasses.VectorParameter.VectorParameter _vp in vectorParams)
+			{
+				_vectorParams[indexer] = new VectorParameter(_shaderPass.NameIndices.First(x => x.Value == _vp.NameIndex).Key, (ShaderParamType)_vp.Type, _vp.Index, _vp.ArraySize, _vp.Dim);
+				_vectorParams[indexer].NameIndex = _vp.NameIndex;
+				indexer++;
+			}
+			return _vectorParams;
+		}
+
+		private static MatrixParameter[] ConvertMatrixParams(AssetList<SourceGenerated.Subclasses.MatrixParameter.MatrixParameter> matrixParams, ISerializedPass _shaderPass)
+		{
+			MatrixParameter[] mparray = new MatrixParameter[matrixParams.Count];
+			int indexer = 0;
+			foreach (SourceGenerated.Subclasses.MatrixParameter.MatrixParameter _mp in matrixParams)
+			{
+				mparray[indexer] = new MatrixParameter(_shaderPass.NameIndices.First(x => x.Value == _mp.NameIndex).Key, (ShaderParamType)_mp.Type, _mp.Index, _mp.RowCount, _mp.RowCount);
+				mparray[indexer].NameIndex = _mp.NameIndex;
+				mparray[indexer].ArraySize = _mp.ArraySize;
+				indexer++;
+			}
+			return mparray;
 		}
 
 		private static void ExportPassConstantBufferDefinitions(
