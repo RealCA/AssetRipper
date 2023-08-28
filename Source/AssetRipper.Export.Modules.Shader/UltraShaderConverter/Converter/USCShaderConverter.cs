@@ -1,4 +1,5 @@
-﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
@@ -8,6 +9,17 @@ using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 
 namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.Converter
 {
+	public class CommonParameterConverted
+	{
+		public BufferBinding[] bufferBindings;
+		public ConstantBuffer[] constantBuffers;
+		public CommonParameterConverted(int bufferBindingSize, int constantBuffersSize)
+		{
+			bufferBindings = new BufferBinding[bufferBindingSize];
+			constantBuffers = new ConstantBuffer[constantBuffersSize];
+		}
+	}
+
 	public class USCShaderConverter
 	{
 		public DirectXCompiledShader? DxShader { get; set; }
