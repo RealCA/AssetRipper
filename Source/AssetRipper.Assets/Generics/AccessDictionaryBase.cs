@@ -160,7 +160,13 @@ namespace AssetRipper.Assets.Generics
 		}
 
 		/// <inheritdoc/>
-		public abstract IEnumerator<AccessPairBase<TKey, TValue>> GetEnumerator();
+		public IEnumerator<AccessPairBase<TKey, TValue>> GetEnumerator()
+		{
+			for (int i = 0; i < Count; i++)
+			{
+				yield return GetPair(i);
+			}
+		}
 
 		/// <inheritdoc/>
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

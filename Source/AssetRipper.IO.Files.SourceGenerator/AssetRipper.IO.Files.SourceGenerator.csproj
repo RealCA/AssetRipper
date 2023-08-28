@@ -1,17 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<OutputPath>..\0Bins\Other\AssetRipper.IO.Files.SourceGenerator\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.IO.Files.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\Bins\Other\AssetRipper.IO.Files.SourceGenerator\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.IO.Files.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.IO.Endian\AssetRipper.IO.Endian.csproj" />
+		<ProjectReference Include="..\AssetRipper.Utils.SourceGeneration\AssetRipper.Utils.SourceGeneration.csproj" />
 	</ItemGroup>
 
 </Project>

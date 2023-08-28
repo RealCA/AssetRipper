@@ -6,5 +6,4 @@ namespace AssetRipper.Assets.Bundles;
 public interface IDependencyProvider
 {
 	FileBase? FindDependency(FileIdentifier identifier);
-	void ReportMissingDependency(FileIdentifier identifier);
 }

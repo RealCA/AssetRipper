@@ -26,7 +26,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 		private static readonly int[] YYY_MASK = new int[] { 1, 1, 1 };
 		private static readonly int[] ZZZ_MASK = new int[] { 2, 2, 2 };
 
-		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
+		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData, Converter.CommonParameterConverted commonParameterConverted)
 		{
 			bool changes = false;
 

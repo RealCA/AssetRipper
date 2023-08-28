@@ -8,7 +8,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 	/// </summary>
 	public class USILCompareOrderOptimizer : IUSILOptimizer
 	{
-		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
+		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData, Converter.CommonParameterConverted commonParameterConverted)
 		{
 			bool changes = false;
 

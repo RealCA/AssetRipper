@@ -9,7 +9,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Fixers
 	/// </summary>
 	public class USILGetDimensionsFixer : IUSILOptimizer
 	{
-		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
+		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData, Converter.CommonParameterConverted commonParameterConverted)
 		{
 			bool changes = false;
 

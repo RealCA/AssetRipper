@@ -2,13 +2,16 @@
 
 	<PropertyGroup>
 		<OutputType>exe</OutputType>
-		<OutputPath>..\0Bins\Other\AssetRipper.GUI.SourceGenerator\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\Bins\Other\AssetRipper.GUI.SourceGenerator\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.GUI.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.Utils.SourceGeneration\AssetRipper.Utils.SourceGeneration.csproj" />
 	</ItemGroup>
 
 </Project>

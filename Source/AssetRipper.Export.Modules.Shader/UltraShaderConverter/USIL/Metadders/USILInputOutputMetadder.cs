@@ -6,7 +6,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Metadders
 {
 	public class USILInputOutputMetadder : IUSILOptimizer
 	{
-		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
+		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData, Converter.CommonParameterConverted commonParameterConverted)
 		{
 			List<USILInstruction> instructions = shader.instructions;
 			foreach (USILInstruction instruction in instructions)

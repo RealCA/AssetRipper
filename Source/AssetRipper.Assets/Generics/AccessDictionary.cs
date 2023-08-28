@@ -84,14 +84,5 @@
 			}
 			return found;
 		}
-
-		/// <inheritdoc/>
-		public override IEnumerator<AccessPair<TKey, TValue, TKeyBase, TValueBase>> GetEnumerator()
-		{
-			for (int i = 0; i < Count; i++)
-			{
-				yield return GetPair(i);
-			}
-		}
 	}
 }

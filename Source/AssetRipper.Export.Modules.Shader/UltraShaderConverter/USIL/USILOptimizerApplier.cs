@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.Converter;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Fixers;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Metadders;
@@ -36,11 +37,11 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL
 			new USILForLoopOptimizer(),
 		};
 
-		public static void Apply(UShaderProgram shader, ShaderSubProgram shaderData)
+		public static void Apply(UShaderProgram shader, CommonParameterConverted commonParameterConverted, ShaderSubProgram shaderData)
 		{
 			for (int i = 0; i < OPTIMIZER_TYPES.Length; i++)
 			{
-				OPTIMIZER_TYPES[i].Run(shader, shaderData);
+				OPTIMIZER_TYPES[i].Run(shader, shaderData, commonParameterConverted);
 			}
 		}
 	}

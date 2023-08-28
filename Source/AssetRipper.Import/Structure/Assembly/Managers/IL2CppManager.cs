@@ -55,7 +55,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			string? gameDataPath = gameStructure.GameDataPath;
 			if (string.IsNullOrWhiteSpace(gameDataPath))
 			{
-				throw new ArgumentException($"{nameof(gameStructure.GameDataPath)} cannot be null or whitespace.", nameof(gameStructure));
+				throw new ArgumentNullException(nameof(gameDataPath));
 			}
 
 			GameDataPath = gameDataPath;
@@ -63,11 +63,18 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			UnityPlayerPath = gameStructure.UnityPlayerPath;
 			MetaDataPath = gameStructure.Il2CppMetaDataPath;
 
-			UnityVersion = gameStructure.Version ?? Cpp2IlApi.DetermineUnityVersion(UnityPlayerPath, GameDataPath);
+			if (gameStructure.Version is not null)
+			{
+				UnityVersion = new UnityVersion((ushort)gameStructure.Version[0], (ushort)gameStructure.Version[1], (ushort)gameStructure.Version[2]);
+			}
+			else
+			{
+				UnityVersion = Cpp2IlApi.DetermineUnityVersion(UnityPlayerPath!, GameDataPath);
+			}
 
 			if (UnityVersion == default)
 			{
-				throw new Exception("Could not determine the unity version");
+				throw new NullReferenceException("Could not determine the unity version");
 			}
 			else
 			{

@@ -9,6 +9,20 @@ namespace AssetRipper.Assets.IO.Reading
 		{
 			AssetCollection = assetCollection;
 		}
+		public string ReadStrings(int length)
+		{
+
+			if (length == 0)
+			{
+				return string.Empty;
+			}
+
+			string ret = ReadString(length);
+			AlignStream();
+			//Strings have supposedly been aligned since 2.1.0,
+			//which is earlier than the beginning of AssetRipper version support.
+			return ret;
+		}
 
 		public override string ReadString()
 		{

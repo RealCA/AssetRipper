@@ -1,4 +1,4 @@
-﻿using AssetRipper.Text.SourceGeneration;
+﻿using AssetRipper.Utils.SourceGeneration;
 using System.CodeDom.Compiler;
 using System.Globalization;
 using System.Text.RegularExpressions;

@@ -47,7 +47,7 @@ namespace AssetRipper.Export.Modules.Shaders.Handlers
 
 						UShaderProgram uProg = dx2UsilConverter.shader;
 
-						USILOptimizerApplier.Apply(uProg, subProgram);
+						USILOptimizerApplier.Apply(uProg, default, subProgram);
 
 						UShaderFunctionToHLSL hlslConverter = new UShaderFunctionToHLSL(uProg);
 

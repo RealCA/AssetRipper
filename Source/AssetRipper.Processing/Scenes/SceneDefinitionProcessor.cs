@@ -2,8 +2,9 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
-using AssetRipper.Processing.Editor;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_29;
@@ -74,8 +75,7 @@ namespace AssetRipper.Processing.Scenes
 						Debug.Assert(pair.Value.Asset.IsNull(), "Scene pointer is not null");
 
 						string path = Path.ChangeExtension(pair.Key.String, null);
-						path = OriginalPathHelper.EnsurePathNotRooted(path);
-						path = OriginalPathHelper.EnsureStartsWithAssets(path);
+						Debug.Assert(path.StartsWith("Assets/", StringComparison.Ordinal), "Scene path is not relative to the project directory.");
 						int index = IndexOf(bundle.Collections, sceneCollections, startingIndex);
 						if (index < 0)
 						{

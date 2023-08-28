@@ -1,30 +1,35 @@
-﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.Converter;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
+using AssetRipper.SourceGenerated.Subclasses.SerializedPass;
+using DXDecompiler.DX9Shader.Bytecode.Ctab;
 
 namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Metadders
 {
 	public class USILCBufferMetadder : IUSILOptimizer
 	{
-		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
+		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData, Converter.CommonParameterConverted commonParameterConverted)
 		{
 			List<USILInstruction> instructions = shader.instructions;
 			foreach (USILInstruction instruction in instructions)
 			{
 				if (instruction.destOperand != null)
 				{
-					UseMetadata(instruction.destOperand, shaderData);
+					UseMetadata(instruction.destOperand, shaderData, commonParameterConverted);
 				}
 
 				foreach (USILOperand operand in instruction.srcOperands)
 				{
-					UseMetadata(operand, shaderData);
+					UseMetadata(operand, shaderData, commonParameterConverted);
 				}
 			}
 			return true; // any changes made?
 		}
 
-		private static void UseMetadata(USILOperand operand, ShaderSubProgram shaderData)
+		private static void UseMetadata(USILOperand operand, ShaderSubProgram shaderData, CommonParameterConverted commonParameterConverted)
 		{
 			if (operand.operandType == USILOperandType.ConstantBuffer)
 			{
@@ -40,8 +45,19 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Metadders
 				HashSet<NumericShaderParameter> cbParams = new HashSet<NumericShaderParameter>();
 				List<int> cbMasks = new List<int>();
 
-				BufferBinding binding = shaderData.ConstantBufferBindings.First(b => b.Index == cbRegIdx);
-				ConstantBuffer constantBuffer = shaderData.ConstantBuffers.First(b => b.Name == binding.Name);
+				BufferBinding binding;
+				ConstantBuffer constantBuffer;
+
+				if (shaderData.ConstantBufferBindings.Length < 1)
+				{
+					binding = commonParameterConverted.bufferBindings.First(b => b.Index == cbRegIdx);
+					constantBuffer = commonParameterConverted.constantBuffers.First(b => b.Name == binding.Name);
+				}
+				else
+				{
+					binding = shaderData.ConstantBufferBindings.First(b => b.Index == cbRegIdx);
+					constantBuffer = shaderData.ConstantBuffers.First(b => b.Name == binding.Name);
+				}
 
 				// Search children fields
 				foreach (NumericShaderParameter param in constantBuffer.AllNumericParams)

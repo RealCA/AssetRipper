@@ -2,12 +2,12 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<OutputPath>..\0Bins\Other\AssetRipper.IO.Endian.SourceGenerator\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.IO.Endian.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\Bins\Other\AssetRipper.IO.Endian.SourceGenerator\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.IO.Endian.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.0.0" />
+		<ProjectReference Include="..\AssetRipper.Utils.SourceGeneration\AssetRipper.Utils.SourceGeneration.csproj" />
 	</ItemGroup>
 
 </Project>

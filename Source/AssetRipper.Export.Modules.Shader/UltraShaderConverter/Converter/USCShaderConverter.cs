@@ -1,4 +1,4 @@
-using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX;
@@ -45,7 +45,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.Converter
 			ShaderProgram = dx2UsilConverter.shader;
 		}
 
-		public void ApplyMetadataToProgram(ShaderSubProgram subProgram, UnityVersion version)
+		public void ApplyMetadataToProgram(ShaderSubProgram subProgram, CommonParameterConverted _shaderpass, UnityVersion version)
 		{
 			if (ShaderProgram == null)
 			{
@@ -64,7 +64,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.Converter
 
 			ShaderProgram.shaderFunctionType = isVertex ? UShaderFunctionType.Vertex : UShaderFunctionType.Fragment;
 
-			USILOptimizerApplier.Apply(ShaderProgram, subProgram);
+			USILOptimizerApplier.Apply(ShaderProgram, _shaderpass	, subProgram);
 		}
 
 		public string CovnertUShaderProgramToHLSL(int depth)
